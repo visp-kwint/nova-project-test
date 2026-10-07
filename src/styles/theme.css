@@ -1,0 +1,51 @@
+:root {
+  /* Палитра NOVA, Concept G (брендбук) */
+  --color-midnight: #0f172a;
+  --color-slate-dark: #1e293b;
+  --color-slate-mid: #334155;
+  --color-silver: #94a3b8;
+  --color-mist: #e2e8f0;
+  --color-white: #ffffff;
+  --color-gold: #f59e0b;
+  --color-gold-light: #fef3c7;
+
+  /* Роли */
+  --bg-app: var(--color-midnight);
+  --bg-surface: var(--color-slate-dark);
+  --bg-elevated: #27364d;
+  --border-subtle: var(--color-slate-mid);
+  --border-gold: color-mix(in srgb, var(--color-gold) 55%, transparent);
+  --text-primary: var(--color-white);
+  --text-secondary: var(--color-mist);
+  --text-muted: var(--color-silver);
+  --accent: var(--color-gold);
+  --accent-strong: var(--color-gold-light);
+  /* Тёмный текст на золотых кнопках */
+  --accent-contrast: var(--color-midnight);
+  /* Тонкое золотое свечение (только как акцент, не как «жёлтое сияние» текста) */
+  --glow-gold: rgb(245 158 11 / 0.22);
+  --shadow-gold: 0 6px 20px rgb(245 158 11 / 0.16);
+
+  /* Янтарные блоки (повышенная сложность, индивидуальные расчёты) */
+  --amber-bg: color-mix(in srgb, var(--color-gold) 12%, var(--color-slate-dark));
+  --amber-border: var(--color-gold);
+  --amber-text: var(--color-gold-light);
+
+  /* Шрифты: основной Inter (400–500) и в заголовках, и в тексте.
+     Раньше заголовки были узким Cormorant Garamond — по замечанию возвращаем Inter. */
+  --font-display: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Радиусы */
+  --radius-card: 14px;
+  --radius-control: 8px;
+  --shadow-card: 0 10px 30px rgb(2 6 23 / 0.4);
+
+  /* Типографика */
+  --fs-hero: clamp(2.6rem, 6.4vw, 4.6rem);
+  --fs-section: 1.6rem;
+  --fs-body: 1rem;
+  --tracking-wide: 0.12em;
+  --tracking-brand: 0.145em; /* wordmark NOVA (из svg: 14/96 em) */
+}

@@ -1,0 +1,56 @@
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  /* Тёмный фон: midnight → slate-dark (п.1) */
+  background: linear-gradient(180deg, var(--color-midnight) 0%, var(--color-slate-dark) 100%);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Заголовки — Inter (по замечанию: узкая антиква вернулась обратно) */
+h1, h2, h3, h4 {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 24px 72px;
+}
+
+.container { width: 100%; }
+
+/* Утилиты */
+.section { margin-top: 64px; }
+.section-title {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: var(--fs-section);
+  letter-spacing: 0.02em;
+  margin: 0 0 20px;
+}
+.muted { color: var(--text-muted); }
+.text-gold { color: var(--accent); }
