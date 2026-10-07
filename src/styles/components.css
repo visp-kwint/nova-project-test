@@ -10,38 +10,22 @@
 .header-inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; /* wordmark слева, меню справа */
   gap: 24px;
   padding: 14px 24px;
   max-width: 1180px;
   margin: 0 auto;
 }
 
-/* Brand lockup (п.3: полный логотип в шапке) */
+/* Brand lockup: wordmark «NOVA» (без звезды, искры и теглайна) */
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text-primary); }
 .brand-text { display: flex; flex-direction: column; line-height: 1; }
 .brand-name {
-  position: relative;
   font-family: var(--font-serif);
   font-weight: 600;
   letter-spacing: var(--tracking-brand);
-  font-size: 26px;
+  font-size: 38px; /* wordmark крупнее */
   color: var(--text-primary);
-}
-.brand-sparkle {
-  position: absolute;
-  top: -4px;
-  right: -16px;
-  width: 12px;
-  height: 12px;
-  color: var(--accent);
-}
-.brand-tag {
-  margin-top: 5px;
-  font-size: 9px;
-  letter-spacing: var(--tracking-wide);
-  text-transform: uppercase;
-  color: var(--text-muted);
 }
 .nova-star { display: block; }
 
@@ -887,8 +871,7 @@ select.field-select::-ms-expand { display: none; }
   .hero-strip-item { gap: 12px; }
   .site-nav { gap: 0; }
   .site-nav .nav-link { display: none; }
-  .brand-name { font-size: 21px; }
-  .brand-tag { display: none; }
+  .brand-name { font-size: 28px; }
   .hero-symbol .nova-star { transform: translate(0, 0); } /* на мобильном без сдвига */
   .hero-planet-glow { left: 50%; } /* на узком экране — по центру дуги */
   .lead-layout { grid-template-columns: 1fr; }

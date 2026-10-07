@@ -1,5 +1,6 @@
 
-// Шапка (брендбук, секция 10): логотип слева, навигация + CTA справа.
+// Шапка (брендбук, секция 10): wordmark NOVA слева, навигация + CTA справа.
+// Звезда в шапке не используется (только большая звезда в hero).
 // Меню на русском (задача #5).
 import { Link, useLocation } from 'react-router-dom';
 import { Brand } from '@/components/ui/Brand';
@@ -17,7 +18,7 @@ export function Header() {
   return (
     <header className="site-header">
       <div className="header-inner">
-        <Brand tagline />
+        <Brand />
         <nav className="site-nav" aria-label="Основная навигация">
           {NAV.map((n) => {
             const active = isConstructor ? n.to === '/constructor' : n.label === 'Услуги' && !isConstructor;
