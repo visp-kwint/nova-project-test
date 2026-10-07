@@ -5,22 +5,23 @@ import { Link } from 'react-router-dom';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { NovaStar } from '@/components/ui/NovaStar';
+import { StarIcon } from '@/components/ui/StarIcon';
 import { PRODUCTS } from '@/config/products';
 
-// Полоса из трёх пунктов под hero (п.3 брендбука).
+// Полоса из трёх пунктов под hero (п.3 брендбука). Нумерации нет — звёздочки.
 const STRIP = [
   {
-    num: '01',
+    key: 'calc',
     title: 'Предварительный расчёт',
     text: 'Стоимость запуска и обслуживания — до заказа, без скрытых доплат.',
   },
   {
-    num: '02',
+    key: 'connectors',
     title: 'Готовые коннекторы',
     text: 'Мессенджеры, почта, CMS и CRM подключаются без ручного кода.',
   },
   {
-    num: '03',
+    key: 'launch',
     title: 'Запуск в 30 дней',
     text: 'Старт типового решения — от 30 дней, сопровождение включено.',
   },
@@ -90,8 +91,7 @@ export function HomePage() {
         <div className="hero-copy">
           <p className="hero-kicker">Практичный ИИ · измеримый результат</p>
           <h1 className="hero-title">
-            Практичный ИИ.{' '}
-            <span className="text-gold">Измеримый результат в 30 дней.</span>
+            Практичный ИИ. Измеримый результат <span className="text-gold">в 30 дней</span>.
           </h1>
           <p className="hero-sub">
             Соберите AI-сервис под свою задачу: выберите продукт, интеграции и сотрудников —
@@ -99,10 +99,10 @@ export function HomePage() {
           </p>
           <div className="hero-cta">
             <Link to="/constructor">
-              <Button variant="primary">Открыть конструктор</Button>
-            </Link>
-            <Link to="/constructor">
-              <Button variant="outline">Стратегический звонок</Button>
+              <Button variant="outline-cta">
+                Открыть конструктор
+                <StarIcon size={15} />
+              </Button>
             </Link>
           </div>
         </div>
@@ -115,11 +115,11 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Полоса из трёх пунктов (п.3) */}
+      {/* Полоса из трёх пунктов (п.3): без нумерации, со звёздочками */}
       <div className="hero-strip">
         {STRIP.map((s) => (
-          <div key={s.num} className="hero-strip-item">
-            <span className="hero-strip-num">{s.num}</span>
+          <div key={s.key} className="hero-strip-item">
+            <StarIcon size={16} />
             <div>
               <strong>{s.title}</strong>
               <p className="muted">{s.text}</p>

@@ -19,11 +19,11 @@ body {
   overflow-x: hidden;
 }
 
-/* Заголовки — Inter (по замечанию: узкая антиква вернулась обратно) */
+/* Заголовки — тонкая контрастная антиква (Cormorant Garamond), тело — Inter */
 h1, h2, h3, h4 {
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
   font-weight: 500;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   color: var(--text-primary);
 }
 

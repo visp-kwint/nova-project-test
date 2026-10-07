@@ -1,8 +1,8 @@
 :root {
-  /* Палитра NOVA, Concept G (брендбук) */
-  --color-midnight: #0f172a;
-  --color-slate-dark: #1e293b;
-  --color-slate-mid: #334155;
+  /* Палитра NOVA, Concept G (брендбук). Фон — максимально глубокий синий. */
+  --color-midnight: #050914;
+  --color-slate-dark: #0c1626;
+  --color-slate-mid: #2a3b55;
   --color-silver: #94a3b8;
   --color-mist: #e2e8f0;
   --color-white: #ffffff;
@@ -12,7 +12,7 @@
   /* Роли */
   --bg-app: var(--color-midnight);
   --bg-surface: var(--color-slate-dark);
-  --bg-elevated: #27364d;
+  --bg-elevated: #16233a;
   --border-subtle: var(--color-slate-mid);
   --border-gold: color-mix(in srgb, var(--color-gold) 55%, transparent);
   --text-primary: var(--color-white);
@@ -31,10 +31,10 @@
   --amber-border: var(--color-gold);
   --amber-text: var(--color-gold-light);
 
-  /* Шрифты: основной Inter (400–500) и в заголовках, и в тексте.
-     Раньше заголовки были узким Cormorant Garamond — по замечанию возвращаем Inter. */
-  --font-display: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-serif: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  /* Шрифты: заголовки — тонкая контрастная антиква (Cormorant Garamond),
+     основной текст — Inter 400–500 (п.2). */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
   /* Радиусы */
