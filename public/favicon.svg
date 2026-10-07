@@ -1,10 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#0F172A"/>
-  <g transform="translate(12 2)">
-    <g transform="rotate(-8 100 102) scale(0.32)">
-      <ellipse cx="100" cy="102" rx="84" ry="17" fill="none" stroke="#E2E8F0" stroke-width="4"/>
-      <path d="M100 6 Q102 90 132 100 Q102 110 100 194 Q98 110 68 100 Q98 90 100 6 Z" fill="#F59E0B"/>
-      <circle cx="169" cy="112" r="14" fill="#FFFFFF"/>
+  <rect width="64" height="64" rx="14" fill="#050914"/>
+  <defs>
+    <radialGradient id="nova-star-grad" cx="100" cy="102" r="96" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stopColor="#FFF6D8"/>
+      <stop offset="0.35" stopColor="#FCD34D"/>
+      <stop offset="1" stopColor="#F59E0B"/>
+    </radialGradient>
+  </defs>
+  <!-- Звезда NOVA (вместо старого лого): острый крест 2:1 + ромб со скруглениями к центру,
+       тонкое наклонное кольцо и шарик на линии кольца. Геометрия 1-в-1 с NovaStar.tsx. -->
+  <g transform="translate(10 9) scale(0.22)">
+    <g transform="translate(0 20) rotate(-8 100 102)">
+      <path d="M 30 102 A 70 13.5 0 0 1 170 102" stroke="#E2E8F0" stroke-width="5" fill="none"/>
+    </g>
+    <path d="M100 -26.7 L106.88 93.75 L164.63 102 L106.88 110.25 L100 231.25 L93.12 110.25 L35.38 102 L93.12 93.75 Z" fill="#F59E0B"/>
+    <path d="M100 62.4 Q104.62 94.96 130.25 102 Q104.62 109.04 100 141.6 Q95.38 109.04 69.75 102 Q95.38 94.96 100 62.4 Z" fill="#F59E0B"/>
+    <g transform="translate(0 20) rotate(-8 100 102)">
+      <path d="M 170 102 A 70 13.5 0 0 1 30 102" stroke="#E2E8F0" stroke-width="5" fill="none"/>
+      <circle cx="160.6" cy="108.75" r="16" fill="#FFFFFF"/>
     </g>
   </g>
 </svg>
