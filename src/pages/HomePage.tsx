@@ -1,12 +1,15 @@
 
 // Главная страница. ТЗ §4.1 + брендбук NOVA (п.3, п.10: полоса из трёх пунктов,
 // карточки готовых конфигураций, FAQ).
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { NovaStar } from '@/components/ui/NovaStar';
 import { StarIcon } from '@/components/ui/StarIcon';
 import { PRODUCTS } from '@/config/products';
+import { ProductPicker } from '@/components/constructor/ProductPicker';
+import { presetProduct } from '@/domain/draft/storage';
+import { track } from '@/domain/analytics/track';
 
 // Полоса из трёх пунктов под hero (п.3 брендбука). Нумерации нет — звёздочки.
 const STRIP = [
@@ -77,6 +80,7 @@ const FAQ = [
 ];
 
 export function HomePage() {
+  const navigate = useNavigate();
   const priceOf = (productId: string) => {
     const p = PRODUCTS.find((x) => x.id === productId);
     if (!p) return null;
@@ -128,7 +132,22 @@ export function HomePage() {
         ))}
       </div>
 
+      {/* ТЗ §4.1: блок выбора продукта — выбор сразу пресетит черновик,
+          конструктор откроется с этим решением. */}
       <section className="section">
+        <h2 className="section-title">Выберите тип решения</h2>
+        <ProductPicker
+          products={PRODUCTS}
+          selectedId={null}
+          onSelect={(id) => {
+            presetProduct(id);
+            track('product_selected', { productId: id, source: 'home' });
+            navigate('/constructor');
+          }}
+        />
+      </section>
+
+      <section id="cases" className="section">
         <h2 className="section-title">Готовые конфигурации</h2>
         <div className="example-grid">
           {READY_CONFIGS.map((c) => (
@@ -169,7 +188,7 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="section">
+      <section id="pricing" className="section">
         <h2 className="section-title">Модель оплаты</h2>
         <p className="muted">
           Разовый запуск + ежемесячное обслуживание. Первый администратор и базовое хранилище —
@@ -177,7 +196,7 @@ export function HomePage() {
         </p>
       </section>
 
-      <section className="section">
+      <section id="about" className="section">
         <h2 className="section-title">Дисклеймер</h2>
         <p className="muted">
           Расчёты в конструкторе носят предварительный характер. Итоговая стоимость подтверждается

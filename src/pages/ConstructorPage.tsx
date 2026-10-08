@@ -1,7 +1,7 @@
 
 // Экран конструктора. TZ §4.2: шаги 1-7 + финальная конфигурация + заявка.
 // Связывает useConstructor, расчёт, пикеры, форму и экран конфигурации.
-import { useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useConstructor } from '@/state/useConstructor';
 import { useConstructData } from '@/state/useConstructData';
 import { calculatePrice } from '@/domain/pricing';
@@ -11,6 +11,7 @@ import { getIntegrationById } from '@/config/integrations';
 import { AI_MODE_LABEL } from '@/config/ai-modes';
 import { plural } from '@/domain/text';
 import { Card } from '@/components/ui/Card';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { ProductPicker } from '@/components/constructor/ProductPicker';
 import { FeaturesPicker } from '@/components/constructor/FeaturesPicker';
 import { IntegrationPicker } from '@/components/constructor/IntegrationPicker';
@@ -64,10 +65,65 @@ function hasAnySelection(state: ConstructorState): boolean {
 }
 
 export function ConstructorPage() {
-  const { state, set, toggleFeature, toggleIntegration, selectProduct, reset } = useConstructor();
+  const { state, set, toggleFeature, toggleIntegration, selectProduct, reset, isPristine } = useConstructor();
   const data = useConstructData();
 
   const [view, setView] = useState<View>('edit');
+  /** Канал формы заявки (TZ §3.5): «заявка» или «отправить менеджеру». */
+  const [leadChannel, setLeadChannel] = useState<'lead' | 'manager'>('lead');
+  const [resetOpen, setResetOpen] = useState(false);
+
+  // TZ §14: «открытие конструктора» — одно событие на mount экрана.
+  useEffect(() => {
+    track('constructor_opened');
+  }, []);
+
+  // TZ §10.3: подтверждение сброса в модалке (вместо window.confirm).
+  // Чистая конфигурация сбрасывается без диалога; reset сам трекает config_reset.
+  const confirmReset = () => {
+    if (isPristine) return;
+    setResetOpen(true);
+  };
+  const doReset = () => {
+    reset();
+    setResetOpen(false);
+    setView('edit');
+  };
+  const cancelReset = useCallback(() => setResetOpen(false), []);
+
+  // TZ §14: «переход между шагами» — scrollspy по якорям #step-* в edit-виде.
+  // Событие шлём только при реальной смене видимого шага; ref хранит
+  // предыдущий, чтобы не дублировать и не заводить side-effect в updater.
+  const [activeStep, setActiveStep] = useState<string>(STEPS[0].id);
+  const prevStepRef = useRef<string>(STEPS[0].id);
+  useEffect(() => {
+    if (view !== 'edit') return;
+    const onScroll = () => {
+      const mid = window.innerHeight / 2;
+      const docBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 4;
+      let current = STEPS[0].id;
+      for (const s of STEPS) {
+        const el = document.getElementById(s.id);
+        if (el && el.getBoundingClientRect().top <= mid) current = s.id;
+      }
+      // До дна — активным считаем последний шаг (Итог).
+      if (docBottom) current = STEPS[STEPS.length - 1].id;
+      if (current !== prevStepRef.current) {
+        prevStepRef.current = current;
+        track('step_changed', { to: current });
+        setActiveStep(current);
+      }
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [view]);
 
   const product = getProductById(state.productId);
 
@@ -84,10 +140,10 @@ export function ConstructorPage() {
 
   // Доступные для выбранного продукта каталоги (TZ §3.2 — struct разрешений).
   const allowedFeatures = product
-    ? data.features.filter((f) => product.availableFeatureIds.includes(f.id))
+    ? data.features.filter((f) => product.availableFeatures.includes(f.id))
     : [];
   const allowedIntegrations = product
-    ? data.integrations.filter((i) => product.availableIntegrationIds.includes(i.id))
+    ? data.integrations.filter((i) => product.availableIntegrations.includes(i.id))
     : [];
   const publishingChannels = allowedIntegrations.filter((i) => i.category === 'publishing');
   const channelTitles: Record<string, string> = {};
@@ -99,6 +155,12 @@ export function ConstructorPage() {
   };
   const goLead = () => {
     track('step_changed', { to: 'lead' });
+    setLeadChannel('lead');
+    setView('lead');
+  };
+  const goManager = () => {
+    track('step_changed', { to: 'lead', channel: 'manager' });
+    setLeadChannel('manager');
     setView('lead');
   };
   const goEdit = () => {
@@ -125,7 +187,7 @@ export function ConstructorPage() {
     <div className="constructor">
       <div className="constructor-head">
         <h1 className="section-title">Конструктор AI-сервиса</h1>
-        <button type="button" className="reset-link" onClick={reset}>
+        <button type="button" className="reset-link" onClick={confirmReset}>
           Сбросить конфигурацию
         </button>
       </div>
@@ -136,8 +198,14 @@ export function ConstructorPage() {
             <div className="step-bar-nav">
               {STEPS.map((s, i) => {
                 const done = s.done(state, product);
+                const active = activeStep === s.id;
                 return (
-                  <a key={s.id} href={`#${s.id}`} className={done ? 'step-dot done' : 'step-dot'}>
+                  <a
+                    key={s.id}
+                    href={`#${s.id}`}
+                    className={`step-dot ${done ? 'done' : ''} ${active ? 'current' : ''}`.trim()}
+                    aria-current={active ? 'step' : undefined}
+                  >
                     <span className="step-dot-num">{done ? '✓' : i + 1}</span>
                     <span className="step-dot-label">{s.title}</span>
                   </a>
@@ -158,8 +226,8 @@ export function ConstructorPage() {
                 const p = getProductById(id);
                 if (p) {
                   selectProduct(id, {
-                    features: p.availableFeatureIds,
-                    integrations: p.availableIntegrationIds,
+                    features: p.availableFeatures,
+                    integrations: p.availableIntegrations,
                   });
                 }
               }}
@@ -238,6 +306,7 @@ export function ConstructorPage() {
             result={price}
             configLines={configLines}
             onGoLead={goLead}
+            onGoManager={goManager}
             onGoEdit={goEdit}
           />
         </div>
@@ -245,9 +314,24 @@ export function ConstructorPage() {
 
       {view === 'lead' && (
         <div className="section">
-          <LeadForm state={state} configSummary={configSummary} configLines={configLines} />
+          <LeadForm
+            state={state}
+            configSummary={configSummary}
+            configLines={configLines}
+            channel={leadChannel}
+          />
         </div>
       )}
+
+      <ConfirmDialog
+        open={resetOpen}
+        title="Сбросить конфигурацию?"
+        description="Все выбранные параметры будут удалены. Действие необратимо."
+        confirmLabel="Сбросить"
+        cancelLabel="Отмена"
+        onConfirm={doReset}
+        onCancel={cancelReset}
+      />
     </div>
   );
 }
@@ -274,9 +358,27 @@ function buildConfigLines(
     `Сотрудники: ${nEmp} ${plural(nEmp, ['сотрудник', 'сотрудника', 'сотрудников'])}` +
       ` (администраторов: ${nAdmin})` +
       (state.personalHistory ? ', личная история' : '') +
-      (state.sharedCompanyKb ? ', общая база компании' : ''),
+      (state.sharedCompanyKb ? ', общая база компании' : '') +
+      (state.employeeRestrictions ? ', ограничения для отдельных сотрудников' : ''),
   );
-  lines.push('Хранилище: ' + state.storageGb + ' ГБ' + (state.storageLargeArchive ? ' + большие архивы' : ''));
+  lines.push(
+    'Хранилище: ' +
+      state.storageGb +
+      ' ГБ' +
+      (state.fileCount > 0 ? `, файлов: ${state.fileCount}` : '') +
+      (state.storageLargeArchive ? ' + большие архивы' : '') +
+      (state.kbManualPreparation ? ' + ручная подготовка документов' : ''),
+  );
+  if (state.publishChannel || state.publishContentType) {
+    lines.push(
+      'Публикация: ' +
+        (state.publishContentType ? `контент — ${state.publishContentType}` : 'канал не выбран') +
+        (state.publishText ? ' · текст' : '') +
+        (state.publishImage ? ' · изображения' : '') +
+        (state.publishComments ? ' · комментарии' : '') +
+        (state.publishStats ? ' · статистика' : ''),
+    );
+  }
   lines.push('AI: ' + (AI_MODE_LABEL[state.aiPaymentMode] ?? state.aiPaymentMode));
   if (state.customRequirements.trim()) {
     lines.push('Требования: ' + state.customRequirements.trim());

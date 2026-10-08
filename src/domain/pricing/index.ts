@@ -157,9 +157,13 @@ export function calculatePrice(
       note: `${pricing.perExtraStorageGb.toLocaleString('ru-RU')} ₽/ГБ`,
     });
   }
-  // Большие архивы / нестандартный импорт → индивидуальный расчёт (TZ §6.2).
+  // Большие архивы / нестандартный импорт / ручная подготовка документов →
+  // индивидуальный расчёт (TZ §6.2).
   if (state.storageLargeArchive) {
     individualItems.push('Обработка больших архивов / нестандартный импорт');
+  }
+  if (state.kbManualPreparation) {
+    individualItems.push('Ручная подготовка документов');
   }
 
   // ---------- Пакетная скидка (TZ §5.2) ----------

@@ -16,6 +16,15 @@ export interface PublishingStepProps {
   channelTitles: Record<string, string>;
 }
 
+// Типы публикуемого содержимого (§4.2 «Публикация контента» — тип содержимого).
+// value — человекочитаемый, попадает в итоговую конфигурацию как есть.
+const CONTENT_TYPES = [
+  { value: 'текст', label: 'Текст' },
+  { value: 'текст + изображения', label: 'Текст + изображения' },
+  { value: 'готовые изображения', label: 'Готовые изображения' },
+  { value: 'смешанный контент', label: 'Смешанный контент' },
+];
+
 export function PublishingStep({
   state,
   set,
@@ -39,17 +48,31 @@ export function PublishingStep({
             </a>
           </div>
         ) : (
-          <Select
-            id="publish-channel"
-            label="Канал публикации"
-            value={state.publishChannel ?? ''}
-            placeholder="Не выбран"
-            options={[
-              { value: '', label: 'Не выбран' },
-              ...availableChannels.map((id) => ({ value: id, label: channelTitles[id] ?? id })),
-            ]}
-            onChange={(v) => set('publishChannel', v || null)}
-          />
+          <>
+            <Select
+              id="publish-channel"
+              label="Канал публикации"
+              value={state.publishChannel ?? ''}
+              placeholder="Не выбран"
+              options={[
+                { value: '', label: 'Не выбран' },
+                ...availableChannels.map((id) => ({ value: id, label: channelTitles[id] ?? id })),
+              ]}
+              onChange={(v) => set('publishChannel', v || null)}
+            />
+
+            <Select
+              id="publish-content-type"
+              label="Тип публикуемого содержимого"
+              value={state.publishContentType ?? ''}
+              placeholder="Не выбран"
+              options={[
+                { value: '', label: 'Не выбран' },
+                ...CONTENT_TYPES,
+              ]}
+              onChange={(v) => set('publishContentType', v || null)}
+            />
+          </>
         )}
 
         <div className="toggle-row">

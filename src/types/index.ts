@@ -20,10 +20,10 @@ export interface Product {
   monthlyPrice: number;
   /** Сколько AI-агентов в комплекте (0 = индивидуальное/консультация). */
   agentCount: number;
-  /** Доступные функции для этого продукта (разрешения из backend). */
-  availableFeatureIds: string[];
-  /** Доступные интеграции для этого продукта. */
-  availableIntegrationIds: string[];
+  /** Доступные функции для этого продукта (разрешения из backend, TZ §3.2). */
+  availableFeatures: string[];
+  /** Доступные интеграции для этого продукта (TZ §12). */
+  availableIntegrations: string[];
 }
 
 export type FeatureCategory =
@@ -91,6 +91,8 @@ export interface ConstructorState {
   storageGb: number;
   /** Обработка больших архивов / нестандартный импорт — индивидуальный расчёт. */
   storageLargeArchive: boolean;
+  /** Ручная подготовка документов (TZ §4.2, §6.2 — индивидуальный расчёт). */
+  kbManualPreparation: boolean;
   aiPaymentMode: AiPaymentMode;
   // Публикация контента (§4.2 «Публикация контента»).
   publishChannel: string | null;
@@ -100,6 +102,12 @@ export interface ConstructorState {
   publishStats: boolean;
   /** Свободные требования (не передаются в аналитику). */
   customRequirements: string;
+  /** Тип публикуемого содержимого (§4.2 «Публикация контента»). */
+  publishContentType: string | null;
+  /** Ограничения для отдельных сотрудников (§4.2 «Сотрудники и доступы»). */
+  employeeRestrictions: boolean;
+  /** Количество файлов в базе знаний (§4.2 «Хранилище и база знаний»). */
+  fileCount: number;
 }
 
 export interface PriceBreakdown {

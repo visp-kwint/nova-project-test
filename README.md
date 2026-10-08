@@ -56,3 +56,35 @@ src/
 | `VITE_API_BASE_URL`   | URL backend; пусто => mock API     |
 
 См. `.env.example`.
+
+## Изменение тарифов
+
+Все цены и пороги живут в одном файле — `src/config/pricing-config.ts`
+(объект `PRICING_CONFIG`, административная конфигурация расчёта). В UI
+цены не зашиты: компоненты берут значения только из этой конфигурации.
+
+| Поле                          | Что меняет                                              |
+|-------------------------------|---------------------------------------------------------|
+| `perExtraEmployee`            | доплата за каждого дополнительного сотрудника, ₽/мес   |
+| `perExtraAdmin`               | доплата за каждого дополнительного администратора, ₽/мес |
+| `includedStorageGb`           | объём бесплатного хранилища, ГБ                         |
+| `perExtraStorageGb`           | доплата за каждый дополнительный ГБ, ₽/мес               |
+| `integrationLevels.basic/.standard/.advanced` | стоимость подключения и сопровождения по уровню интеграции (setup + monthly) |
+| `maxAutoIntegrations`         | порог: при большем числе авто-интеграций расчёт уходит в индивидуальный |
+| `multiAgentMaintenanceDiscount` / `multiAgentSetupDiscount` | пакетная скидка для комплектных продуктов (0–1) |
+| `aiBudgetByMode`              | ориентировочный месячный бюджет AI по способу оплаты (обезличенная оценка) |
+| `individualProductTypes`      | типы продуктов, которые всегда уходят в индивидуальный расчёт |
+
+Цены конкретных каталогов (базовая цена продукта, стоимость интеграций) — в
+`src/config/products.ts` и `src/config/integrations.ts`. В продакшене вся эта
+конфигурация подгружается с backend по `GET /api/construct/pricing-config`
+и может меняться без пересборки фронтенда. После правок локальной
+конфигурации достаточно перезапустить `npm run dev`.
+
+## Пример обезличенных тестовых данных
+
+Каталоги `src/config/products.ts`, `src/config/features.ts`,
+`src/config/integrations.ts` и `src/config/pricing-config.ts` —
+демонстрационные обезличенные данные (NOVA, круглые суммы-заглушки).
+Их же используют unit-тесты `src/domain/pricing/pricing.test.ts`
+и mock API `src/api/mock/constructApi.ts`.

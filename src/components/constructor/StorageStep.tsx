@@ -55,6 +55,40 @@ export function StorageStep({ state, set, pricing }: StorageStepProps) {
           </div>
         </div>
 
+        <div className="field">
+          <label className="field-label" htmlFor="storage-files">
+            Количество файлов в базе знаний
+          </label>
+          <div className="stepper">
+            <button
+              type="button"
+              className="stepper-btn"
+              aria-label="Уменьшить число файлов"
+              onClick={() => set('fileCount', Math.max(0, state.fileCount - 10))}
+              disabled={state.fileCount <= 0}
+            >
+              −
+            </button>
+            <input
+              id="storage-files"
+              type="number"
+              className="field-input"
+              min={0}
+              step={10}
+              value={state.fileCount}
+              onChange={(e) => set('fileCount', Math.max(0, Number(e.target.value) || 0))}
+            />
+            <button
+              type="button"
+              className="stepper-btn"
+              aria-label="Увеличить число файлов"
+              onClick={() => set('fileCount', state.fileCount + 10)}
+            >
+              +
+            </button>
+          </div>
+        </div>
+
         <div className="toggle-row">
           <Toggle
             id="store-large"
@@ -67,6 +101,18 @@ export function StorageStep({ state, set, pricing }: StorageStepProps) {
           {state.storageLargeArchive ? <Badge tone="individual">Индивидуальный расчёт</Badge> : null}
         </div>
 
+        <div className="toggle-row">
+          <Toggle
+            id="store-manual-prep"
+            checked={state.kbManualPreparation}
+            onChange={() => set('kbManualPreparation', !state.kbManualPreparation)}
+          />
+          <label htmlFor="store-manual-prep" className="option-label">
+            Ручная подготовка документов
+          </label>
+          {state.kbManualPreparation ? <Badge tone="individual">Индивидуальный расчёт</Badge> : null}
+        </div>
+
         <p className="field-note">
           Включено {pricing.includedStorageGb} ГБ.
           {extraGb > 0
@@ -76,8 +122,8 @@ export function StorageStep({ state, set, pricing }: StorageStepProps) {
         </p>
 
         <p className="field-note">
-          Самостоятельная загрузка материалов включена. Ручная подготовка документов, нестандартный
-          импорт и обработка больших архивов переводятся в индивидуальную оценку.
+          Самостоятельная загрузка материалов включена в тариф. Ручная подготовка документов,
+          нестандартный импорт и обработка больших архивов — индивидуальный расчёт.
         </p>
       </CardBody>
     </Card>

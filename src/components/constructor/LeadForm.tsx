@@ -6,7 +6,7 @@ import { Card, CardTitle, CardBody } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { track } from '@/domain/analytics/track';
 import { api } from '@/api/client';
-import { validateLead, type LeadData } from '@/domain/validation/validate';
+import { validateLead, validateStateForLead, type LeadData } from '@/domain/validation/validate';
 import type { ConstructorState } from '@/types';
 
 export interface LeadFormProps {
@@ -15,17 +15,35 @@ export interface LeadFormProps {
   configSummary: string;
   /** Строки итоговой конфигурации (показываются справа, п.10). */
   configLines: string[];
+  /** Канал отправки (TZ §3.5): заявка или прямая передача менеджеру. */
+  channel?: 'lead' | 'manager';
 }
 
 type Status = 'idle' | 'submitting' | 'done' | 'error';
 
-export function LeadForm({ state, configSummary, configLines }: LeadFormProps) {
+export function LeadForm({
+  state,
+  configSummary,
+  configLines,
+  channel = 'lead',
+}: LeadFormProps) {
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [serverErrors, setServerErrors] = useState<string[]>([]);
   const [status, setStatus] = useState<Status>('idle');
 
+  // TZ §3.5: «Оставить заявку» и «Отправить менеджеру» — разные сценарии,
+  // в аналитике различаются по каналу (без ПДн).
   const start = () => {
-    if (status === 'idle') track('lead_form_started');
+    if (status === 'idle') track('lead_form_started', { channel });
   };
+
+  const title = channel === 'manager' ? 'Отправить менеджеру' : 'Оставить заявку';
+  const submitLabel =
+    status === 'submitting' ? 'Отправляем…' : channel === 'manager' ? 'Отправить менеджеру' : 'Отправить заявку';
+  const successText =
+    channel === 'manager'
+      ? 'Конфигурация отправлена менеджеру. Он свяжется с вами и пришлёт коммерческое предложение.'
+      : 'Заявка принята. Менеджер свяжется с вами и пришлёт коммерческое предложение.';
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -45,15 +63,32 @@ export function LeadForm({ state, configSummary, configLines }: LeadFormProps) {
       track('validation_error', { fields: Object.keys(result.errors).length });
       return;
     }
+    // Клиентская проверка заполнения конфигурации (TZ §16: «форма валидируется»).
+    const problems = validateStateForLead(state);
+    if (problems.length) {
+      setServerErrors(problems);
+      setStatus('idle');
+      track('validation_error', { source: 'state', fields: problems.length });
+      return;
+    }
     setErrors({});
+    setServerErrors([]);
     setStatus('submitting');
+    // TZ §13: server-side валидация состояния перед отправкой (POST /validate).
+    const serverCheck = await api.validate({ state });
+    if (!serverCheck.ok) {
+      setServerErrors(serverCheck.errors);
+      setStatus('idle');
+      track('validation_error', { source: 'server', fields: serverCheck.errors.length });
+      return;
+    }
     try {
       await api.submitLead({
         data: lead,
         state,
       });
       setStatus('done');
-      track('lead_submitted');
+      track('lead_submitted', { channel });
     } catch {
       setStatus('error');
     }
@@ -62,12 +97,10 @@ export function LeadForm({ state, configSummary, configLines }: LeadFormProps) {
   return (
     <div className="lead-layout">
       <Card className="lead-form">
-        <CardTitle>Оставить заявку</CardTitle>
+        <CardTitle>{title}</CardTitle>
         <CardBody>
           {status === 'done' ? (
-            <p className="lead-success">
-              Заявка принята. Менеджер свяжется с вами и пришлёт коммерческое предложение.
-            </p>
+            <p className="lead-success">{successText}</p>
           ) : (
             <form onSubmit={onSubmit} className="lead-fields">
               <Field label="Имя *" error={errors.contactName}>
@@ -119,11 +152,18 @@ export function LeadForm({ state, configSummary, configLines }: LeadFormProps) {
                   placeholder="Дополнительно о задаче"
                 />
               </Field>
+              {serverErrors.length > 0 ? (
+                <div className="lead-error">
+                  {serverErrors.map((e) => (
+                    <p key={e}>⚠ {e}</p>
+                  ))}
+                </div>
+              ) : null}
               {status === 'error' ? (
                 <p className="lead-error">Не удалось отправить. Попробуйте позже.</p>
               ) : null}
               <Button type="submit" variant="primary" disabled={status === 'submitting'}>
-                {status === 'submitting' ? 'Отправляем…' : 'Отправить заявку'}
+                {submitLabel}
               </Button>
               <p className="field-note">{configSummary}</p>
             </form>
@@ -137,8 +177,8 @@ export function LeadForm({ state, configSummary, configLines }: LeadFormProps) {
           <CardTitle>Итоговая конфигурация</CardTitle>
           <CardBody>
             <ul className="config-lines">
-              {configLines.map((l) => (
-                <li key={l}>{l}</li>
+              {configLines.map((l, i) => (
+                <li key={i}>{l}</li>
               ))}
             </ul>
             <p className="field-note">

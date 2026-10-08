@@ -4,6 +4,7 @@
 import { useEffect } from 'react';
 import { Card, CardTitle, CardBody } from '@/components/ui/Card';
 import { Toggle } from '@/components/ui/Toggle';
+import { Badge } from '@/components/ui/Badge';
 import { monthlyRow } from '@/domain/text';
 import type { ConstructorState } from '@/types';
 import type { ConstructorSet } from '@/state/useConstructor';
@@ -74,6 +75,18 @@ export function TeamStep({ state, set, pricing }: TeamStepProps) {
           <label htmlFor="shared-kb" className="option-label">
             Доступ к общей базе компании
           </label>
+        </div>
+
+        <div className="toggle-row">
+          <Toggle
+            id="emp-restrictions"
+            checked={state.employeeRestrictions}
+            onChange={() => set('employeeRestrictions', !state.employeeRestrictions)}
+          />
+          <label htmlFor="emp-restrictions" className="option-label">
+            Ограничения для отдельных сотрудников
+          </label>
+          {state.employeeRestrictions ? <Badge tone="neutral">включено</Badge> : null}
         </div>
 
         <p className="field-note">

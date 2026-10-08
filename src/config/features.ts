@@ -40,7 +40,7 @@ export const FEATURES: readonly Feature[] = [
     description: 'Загрузка документов и ответы по вашей базе знаний.',
     category: 'knowledge',
     price: 0,
-    monthlyPrice: 1000,
+    // price = 0 ⇒ «включено в тариф»: без доплат, иначе расчёт и UI расходятся.
   },
   {
     id: 'doc-search',
@@ -48,6 +48,14 @@ export const FEATURES: readonly Feature[] = [
     description: 'Точечный поиск по загруженным файлам и выжимки.',
     category: 'knowledge',
     price: 6000,
+  },
+  {
+    id: 'inbound-analysis',
+    title: 'Анализ входящих сообщений',
+    description: 'Автоматическая классификация и выжимка входящих обращений и писем.',
+    category: 'communication',
+    price: 7000,
+    monthlyPrice: 900,
   },
   {
     id: 'responses',
@@ -70,7 +78,7 @@ export const FEATURES: readonly Feature[] = [
     description: 'Ответы на комментарии в соцсетях.',
     category: 'publishing',
     price: 0,
-    monthlyPrice: 800,
+    // price = 0 ⇒ «включено в тариф»: без доплат, иначе расчёт и UI расходятся.
   },
   {
     id: 'analytics',
@@ -91,6 +99,22 @@ export const FEATURES: readonly Feature[] = [
     id: 'custom-scenario',
     title: 'Индивидуальные сценарии',
     description: 'Не типовая логика под ваш процесс.',
+    category: 'advanced',
+    price: 0,
+    requiresIndividualEstimate: true,
+  },
+  {
+    id: 'video-gen',
+    title: 'Генерация видео',
+    description: 'Создание видеоматериалов — нестандартная услуга, оценивается вручную.',
+    category: 'advanced',
+    price: 0,
+    requiresIndividualEstimate: true,
+  },
+  {
+    id: 'voice-calls',
+    title: 'Голосовые звонки / телефония',
+    description: 'Входящие и исходящие голосовые сценарии, работа с телефонией.',
     category: 'advanced',
     price: 0,
     requiresIndividualEstimate: true,

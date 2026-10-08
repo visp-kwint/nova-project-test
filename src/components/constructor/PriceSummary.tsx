@@ -1,7 +1,7 @@
 
 // Итоговая карточка расчёта (TZ §3.4, §10.3). Детальные строки + ИТОГО за
 // первый период + индивидуальные услуги + кнопки.
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Card, CardTitle, CardBody } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -27,9 +27,13 @@ export function PriceSummary({
   onQuote,
   showActions = true,
 }: PriceSummaryProps) {
-  // TZ §14: отследить переход в индивидуальный расчёт.
+  // TZ §14: «переход к индивидуальному расчёту» — одно событие, только на
+  // переход из нормального расчёта в индивидуальный (не при каждом изменении).
+  const prevIndividualRef = useRef(false);
   useEffect(() => {
-    if (result.requiresIndividualEstimate) {
+    const wasIndividual = prevIndividualRef.current;
+    prevIndividualRef.current = result.requiresIndividualEstimate;
+    if (result.requiresIndividualEstimate && !wasIndividual) {
       track('individual_estimate_reached', { items: result.individualItems.length });
     }
   }, [result.requiresIndividualEstimate, result.individualItems.length]);

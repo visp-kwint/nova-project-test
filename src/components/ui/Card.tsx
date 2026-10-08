@@ -8,8 +8,13 @@ type CardProps = Omit<HTMLAttributes<HTMLDivElement>, 'className'> & {
 };
 
 export function Card({ children, className, ...rest }: CardProps) {
+  // className может быть строкой или массивом (пикеры пробрасывают состояния):
+  // нормализуем в плоский список, иначе join() даст "ui-card integration-item,".
+  const classes = ['ui-card', ...(Array.isArray(className) ? className : className ? [className] : [])]
+    .filter(Boolean)
+    .join(' ');
   return (
-    <div className={['ui-card', className].filter(Boolean).join(' ')} {...rest}>
+    <div className={classes} {...rest}>
       {children}
     </div>
   );

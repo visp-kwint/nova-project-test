@@ -268,6 +268,56 @@
 .ui-btn-ghost { background: transparent; color: var(--text-secondary); border-color: transparent; }
 .ui-btn-ghost:hover { color: var(--text-primary); }
 
+/** ================= ConfirmDialog / модалки (замена window.confirm, TZ §10.3) =================
+ * Только токены темы: подложка-затемнение, карточка в стиле .ui-card (без стекла),
+ * заголовок серифным (Cormorant), кнопки — существующие .ui-btn. */
+.nova-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: color-mix(in srgb, var(--color-midnight) 80%, transparent);
+  animation: nova-modal-fade 0.18s ease;
+}
+.nova-modal {
+  width: 100%;
+  max-width: 420px;
+  background: var(--bg-surface);
+  border: 1px solid var(--color-slate-mid);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 26px 24px;
+  animation: nova-modal-pop 0.18s ease;
+}
+.nova-modal-title {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  font-size: 1.25rem;
+  letter-spacing: 0;
+  margin: 0 0 10px;
+}
+.nova-modal-body {
+  margin: 0 0 20px;
+  color: var(--text-secondary);
+  font-size: 0.925rem;
+  line-height: 1.55;
+}
+.nova-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.nova-modal-actions .ui-btn { padding: 10px 18px; }
+@keyframes nova-modal-fade {
+  from { opacity: 0; }
+}
+@keyframes nova-modal-pop {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+}
+
 /** ================= Cards (п.5: без стекла, border slate-mid, контраст ≥4.5:1) ================= */
 .ui-card {
   background: var(--bg-surface);
@@ -377,6 +427,7 @@
 }
 .integration-reqs { margin: 10px 0 0; padding-left: 18px; color: var(--text-secondary); font-size: 13px; }
 .integration-reqs li { margin-bottom: 2px; }
+.integration-reqs-note { margin: 8px 0 0; color: var(--text-muted); font-size: 12px; line-height: 1.5; }
 
 /** ================= Option steps (features / toggles / counters / fields) ===== */
 .feature-list, .step-list { display: flex; flex-direction: column; gap: 12px; }
@@ -774,6 +825,9 @@ select.field-select::-ms-expand { display: none; }
   color: var(--text-secondary);
 }
 .step-dot.done .step-dot-num { background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); }
+/* Активный шаг (scrollspy): золотая рамка на номере + ярче подпись */
+.step-dot.current .step-dot-num { border-color: var(--accent); color: var(--accent); }
+.step-dot.current .step-dot-label { color: var(--text-primary); }
 .step-dot-label {
   font-size: 10px;
   letter-spacing: 0.04em;

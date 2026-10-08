@@ -13,8 +13,8 @@ export const PRODUCTS: readonly Product[] = [
     basePrice: 45000,
     monthlyPrice: 9000,
     agentCount: 1,
-    availableFeatureIds: ['gen-text', 'kb-search', 'responses', 'doc-search'],
-    availableIntegrationIds: ['messenger-basic', 'email-inbox', 'cms-publish'],
+    availableFeatures: ['gen-text', 'kb-search', 'responses', 'doc-search', 'inbound-analysis'],
+    availableIntegrations: ['messenger-basic', 'email-inbox', 'cms-publish'],
   },
   {
     id: 'methodologist',
@@ -25,8 +25,8 @@ export const PRODUCTS: readonly Product[] = [
     basePrice: 39000,
     monthlyPrice: 7500,
     agentCount: 1,
-    availableFeatureIds: ['plans', 'content-plan', 'doc-search', 'kb-search'],
-    availableIntegrationIds: ['email-inbox', 'drive-sync'],
+    availableFeatures: ['plans', 'content-plan', 'doc-search', 'kb-search'],
+    availableIntegrations: ['email-inbox', 'drive-sync'],
   },
   {
     id: 'content-assistant',
@@ -37,8 +37,8 @@ export const PRODUCTS: readonly Product[] = [
     basePrice: 52000,
     monthlyPrice: 11000,
     agentCount: 1,
-    availableFeatureIds: ['gen-text', 'gen-images', 'publish', 'content-plan', 'comment-reply'],
-    availableIntegrationIds: ['social-publish', 'cms-publish', 'messenger-basic'],
+    availableFeatures: ['gen-text', 'gen-images', 'publish', 'content-plan', 'comment-reply'],
+    availableIntegrations: ['social-publish', 'cms-publish', 'messenger-basic'],
   },
   {
     id: 'smm-assistant',
@@ -49,8 +49,8 @@ export const PRODUCTS: readonly Product[] = [
     basePrice: 58000,
     monthlyPrice: 12000,
     agentCount: 1,
-    availableFeatureIds: ['content-plan', 'publish', 'comment-reply', 'analytics', 'gen-images'],
-    availableIntegrationIds: ['social-publish', 'messenger-advanced', 'email-inbox'],
+    availableFeatures: ['content-plan', 'publish', 'comment-reply', 'analytics', 'gen-images'],
+    availableIntegrations: ['social-publish', 'messenger-advanced', 'email-inbox'],
   },
   {
     id: 'corp-assistant',
@@ -61,8 +61,8 @@ export const PRODUCTS: readonly Product[] = [
     basePrice: 120000,
     monthlyPrice: 22000,
     agentCount: 2,
-    availableFeatureIds: ['kb-search', 'doc-search', 'responses', 'multi-employee', 'gen-text'],
-    availableIntegrationIds: ['messenger-advanced', 'email-inbox', 'external-crm'],
+    availableFeatures: ['kb-search', 'doc-search', 'responses', 'multi-employee', 'gen-text'],
+    availableIntegrations: ['messenger-advanced', 'email-inbox', 'external-crm'],
   },
   {
     id: 'docs-agent',
@@ -73,8 +73,8 @@ export const PRODUCTS: readonly Product[] = [
     basePrice: 49000,
     monthlyPrice: 9500,
     agentCount: 1,
-    availableFeatureIds: ['doc-search', 'kb-search', 'gen-text', 'responses'],
-    availableIntegrationIds: ['email-inbox', 'drive-sync', 'external-crm'],
+    availableFeatures: ['doc-search', 'kb-search', 'gen-text', 'responses'],
+    availableIntegrations: ['email-inbox', 'drive-sync', 'external-crm'],
   },
   {
     id: 'combo',
@@ -85,8 +85,8 @@ export const PRODUCTS: readonly Product[] = [
     basePrice: 190000,
     monthlyPrice: 38000,
     agentCount: 3,
-    availableFeatureIds: ['multi-employee', 'gen-text', 'kb-search', 'responses', 'publish'],
-    availableIntegrationIds: ['messenger-advanced', 'social-publish', 'external-crm', 'custom-integration'],
+    availableFeatures: ['multi-employee', 'gen-text', 'kb-search', 'responses', 'publish'],
+    availableIntegrations: ['messenger-advanced', 'social-publish', 'external-crm', 'custom-integration'],
   },
   {
     id: 'custom-solution',
@@ -97,8 +97,8 @@ export const PRODUCTS: readonly Product[] = [
     basePrice: 0,
     monthlyPrice: 0,
     agentCount: 0,
-    availableFeatureIds: ['custom-scenario'],
-    availableIntegrationIds: ['custom-integration'],
+    availableFeatures: ['custom-scenario', 'video-gen', 'voice-calls'],
+    availableIntegrations: ['custom-integration'],
   },
   {
     id: 'consultation',
@@ -109,8 +109,8 @@ export const PRODUCTS: readonly Product[] = [
     basePrice: 0,
     monthlyPrice: 0,
     agentCount: 0,
-    availableFeatureIds: [],
-    availableIntegrationIds: [],
+    availableFeatures: [],
+    availableIntegrations: [],
   },
 ] as const;
 

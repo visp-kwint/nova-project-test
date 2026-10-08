@@ -57,6 +57,12 @@ export function IntegrationPicker({ integrations, selectedIds, onToggle }: Integ
                   {it.limits.map((r) => <li key={r}>{r}</li>)}
                 </ul>
               ) : null}
+
+              {it.requirements?.length ? (
+                <p className="integration-reqs-note">
+                  Нужен доступ: {it.requirements.join(', ')}
+                </p>
+              ) : null}
             </label>
           </Card>
         );

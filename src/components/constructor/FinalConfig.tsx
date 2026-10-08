@@ -15,6 +15,8 @@ export interface FinalConfigProps {
   result: PriceResult;
   configLines: string[];
   onGoLead: () => void;
+  /** «Отправить менеджеру» (TZ §3.5) — заявка в режиме отправки менеджеру. */
+  onGoManager: () => void;
   onGoEdit: () => void;
 }
 
@@ -24,6 +26,7 @@ export function FinalConfig({
   result,
   configLines,
   onGoLead,
+  onGoManager,
   onGoEdit,
 }: FinalConfigProps) {
   const handleQuote = () => {
@@ -48,16 +51,16 @@ export function FinalConfig({
         )}
 
         <ul className="config-lines">
-          {configLines.map((l) => <li key={l}>{l}</li>)}
+          {configLines.map((l, i) => <li key={i}>{l}</li>)}
         </ul>
 
         {result.setupPrice !== null && (
-          <div className="price-rows">
+          <dl className="price-rows">
             <div>
               <dt>ИТОГО за первый период</dt>
               <dd>{result.firstPeriodTotal?.toLocaleString('ru-RU')} ₽</dd>
             </div>
-          </div>
+          </dl>
         )}
 
         <div className="price-actions">
@@ -67,7 +70,7 @@ export function FinalConfig({
           <Button variant="outline" onClick={handleQuote}>
             Скачать коммерческое предложение
           </Button>
-          <Button variant="outline" onClick={onGoLead}>
+          <Button variant="outline" onClick={onGoManager}>
             Отправить менеджеру
           </Button>
           <Button variant="ghost" onClick={onGoEdit}>

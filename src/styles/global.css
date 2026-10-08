@@ -44,7 +44,7 @@ h1, h2, h3, h4 {
 .container { width: 100%; }
 
 /* Утилиты */
-.section { margin-top: 64px; }
+.section { margin-top: 64px; scroll-margin-top: 132px; } /* под шапку + step-bar */
 .section-title {
   font-family: var(--font-serif);
   font-weight: 400;

@@ -8,8 +8,8 @@ import { Brand } from '@/components/ui/Brand';
 const NAV = [
   { label: 'Услуги', to: '/' },
   { label: 'Процесс', to: '/constructor' },
-  { label: 'Кейсы', to: '/' },
-  { label: 'О нас', to: '/' },
+  { label: 'Кейсы', to: '/#cases' },
+  { label: 'О нас', to: '/#about' },
 ];
 
 export function Header() {

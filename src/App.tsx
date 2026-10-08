@@ -3,6 +3,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
+import { ScrollManager } from '@/components/layout/ScrollManager';
 import { HomePage } from '@/pages/HomePage';
 import { ConstructorPage } from '@/pages/ConstructorPage';
 
@@ -10,6 +11,7 @@ export default function App() {
   return (
     <div className="app-shell">
       <Header />
+      <ScrollManager />
       <main className="app-main">
         <Routes>
           <Route path="/" element={<HomePage />} />
